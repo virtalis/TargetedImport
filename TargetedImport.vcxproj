@@ -88,6 +88,16 @@
       <AdditionalLibraryDirectories>C:\Virtalis\Visionary Render 2019.5.0\data\vrtreesdk\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Release\vrtree-linker.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>REM create plugin folder
+if not exist "$(SolutionDir)plugins" mkdir "$(SolutionDir)plugins"
+if not exist "$(SolutionDir)plugins\TargetedImport" mkdir "$(SolutionDir)plugins\TargetedImport"
+
+REM copy output DLL to deployment plugins directory
+xcopy "$(TargetPath)" "$(SolutionDir)plugins\TargetedImport" /y
+REM Update / create the plugin.txt file
+@echo $(TargetFileName) &gt; "$(SolutionDir)plugins\TargetedImport\plugin.txt"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
