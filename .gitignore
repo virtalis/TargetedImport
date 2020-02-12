@@ -1,3 +1,6 @@
 .vs
 x64
 TargetedImport.vcxproj.user
+.vscode
+*.code-workspace
+doc
