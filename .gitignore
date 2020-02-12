@@ -4,3 +4,6 @@ TargetedImport.vcxproj.user
 .vscode
 *.code-workspace
 doc
+*.sln
+*.vcxproj
+*.vcxproj.filters
