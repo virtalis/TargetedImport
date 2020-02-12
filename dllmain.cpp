@@ -41,7 +41,7 @@ static HFFIVar Import(int argc, HFFIVar* argv, void*) {
         importerName
     );
 
-    return VRFFIMakeBool(importSuccess == 0);
+    return VRFFIMakeBool(importSuccess == 1);
 }
 
 // local success = TargetedImport.ImportAndMerge(filepath, scenesRoot, librariesRoot, mergeSettings, importerName)
@@ -75,7 +75,7 @@ static HFFIVar ImportAndMerge(int argc, HFFIVar* argv, void*) {
         importerName
     );
 
-    return VRFFIMakeBool(importSuccess == 0);
+    return VRFFIMakeBool(importSuccess == 1);
 }
 // Enable API stuff
 PLUGIN_ENTRY_POINT const char* VRTREE_APIENTRY VRPSignature()
