@@ -10,9 +10,9 @@ For this reason this is not recommended for use in background scripts that will 
 
 ## Build / Install
 
-To build this plugin you'll need to check the Visual Studio project properties to make sure the Include Directories (in VC++ Directories) and Additional Library Directories (in Linker → General) are set to the correct paths for your Visionary Render installation.
+To build this plugin unzip all the files to a single folder and setup the project by downloading [CMake](https://cmake.org/) and running the command "`cmake .`" in a the folder.
 
-On completion of a release build a post-build event will create a "plugins" folder in the solution directory, which contains the folder you should copy to your VisRen plugins directory. This will contain the DLL and a plugin.txt file containing the name of the DLL file.
+A post-build event will create a "plugins" folder in the solution directory, this will contain a single subfolder with the plugin name, which in turn contains the plugin DLL and a plugin.txt file containing the name of the DLL file. To install the plugin simply copy the folder inside the plugins directory into your VisRen plugins directory.
 
 ## Lua Functions
 
