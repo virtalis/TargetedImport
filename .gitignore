@@ -7,3 +7,4 @@ doc
 *.sln
 *.vcxproj
 *.vcxproj.filters
+plugins
