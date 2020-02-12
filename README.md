@@ -10,7 +10,7 @@ For this reason this is not recommended for use in background scripts that will 
 
 ## Build / Install
 
-To build this plugin unzip all the files to a single folder and setup the project by downloading [CMake](https://cmake.org/) and running the command "`cmake .`" in a the folder.
+To build this plugin unzip all the files to a single folder and setup the project by downloading [CMake](https://cmake.org/) and running the command "`cmake .`" in the folder.
 
 A post-build event will create a "plugins" folder in the solution directory, this will contain a single subfolder with the plugin name, which in turn contains the plugin DLL and a plugin.txt file containing the name of the DLL file. To install the plugin simply copy the folder inside the plugins directory into your VisRen plugins directory.
 
