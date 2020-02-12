@@ -13,6 +13,9 @@ VRXImportAndMergeFunc VRXImportAndMerge = (VRXImportAndMergeFunc)GetProcAddress(
 // and other hooks such as logging and progress displays
 VRPLUGIN_API_IMPL;
 
+// before using the s_logFunc hook, it should be checked for null
+#define LOG(LEVEL,LOGSTRING) if (s_logFunc) s_logFunc(LEVEL, LOGSTRING);
+
 // local success = TargetedImport.Import(filepath, scenesRoot, librariesRoot, importerName)
 static HFFIVar Import(int argc, HFFIVar* argv, void*) {
     // Check types, hacky cos they're not written down...
@@ -22,16 +25,34 @@ static HFFIVar Import(int argc, HFFIVar* argv, void*) {
     bool filepathValid = VRFFIGetType(argv[0]) == stringTypeID;
     bool scenesRootValid = VRFFIGetType(argv[1]) == nodeTypeID;
     bool librariesRootValid = VRFFIGetType(argv[2]) == nodeTypeID;
+
+    // Report errors
+    if (!filepathValid) LOG(1, "filepath argument to Import must be a string");
+    if (!scenesRootValid) LOG(1, "scenesRoot argument to Import must be a node");
+    if (!librariesRootValid) LOG(1, "librariesRoot argument to Import must be a node");
+
     bool importerNameValid = VRFFIGetType(argv[3]) == stringTypeID;
 
-    if (!filepathValid || !scenesRootValid || !librariesRootValid || !importerNameValid) {
+    if (!filepathValid || !scenesRootValid || !librariesRootValid) {
         return nullptr;
     }
 
     const char* filepath = VRFFIGetString(argv[0]);
     HNode scenesRoot = VRFFIGetNode(argv[1]);
     HNode librariesRoot = VRFFIGetNode(argv[2]);
-    const char* importerName = VRFFIGetString(argv[3]);
+
+    // Check optional importer name, default to null
+    const char* importerName = nullptr;
+    if (argc >= 4) {
+        // Importer name provided, check it
+        if (VRFFIGetType(argv[3]) == stringTypeID) {
+            importerName = VRFFIGetString(argv[3]);
+        }
+        else {
+            LOG(1, "If provided, importerName argument to Import must be a string");
+            return nullptr;
+        }
+    }
 
     // Do the import
     int importSuccess = VRXImport(
@@ -54,9 +75,14 @@ static HFFIVar ImportAndMerge(int argc, HFFIVar* argv, void*) {
     bool scenesRootValid = VRFFIGetType(argv[1]) == nodeTypeID;
     bool librariesRootValid = VRFFIGetType(argv[2]) == nodeTypeID;
     bool mergeSettingsValid = VRFFIGetType(argv[3]) == nodeTypeID;
-    bool importerNameValid = VRFFIGetType(argv[4]) == stringTypeID;
 
-    if (!filepathValid || !scenesRootValid || !librariesRootValid || !mergeSettingsValid || !importerNameValid) {
+    // Report errors
+    if (!filepathValid) LOG(1, "filepath argument to ImportAndMerge must be a string");
+    if (!scenesRootValid) LOG(1, "scenesRoot argument to ImportAndMerge must be a node");
+    if (!librariesRootValid) LOG(1, "librariesRoot argument to ImportAndMerge must be a node");
+    if (!mergeSettingsValid) LOG(1, "mergeSettings argument to ImportAndMerge must be a node");
+
+    if (!filepathValid || !scenesRootValid || !librariesRootValid || !mergeSettingsValid) {
         return nullptr;
     }
 
@@ -64,7 +90,19 @@ static HFFIVar ImportAndMerge(int argc, HFFIVar* argv, void*) {
     HNode scenesRoot = VRFFIGetNode(argv[1]);
     HNode librariesRoot = VRFFIGetNode(argv[2]);
     HNode mergeSettings = VRFFIGetNode(argv[3]);
-    const char* importerName = VRFFIGetString(argv[4]);
+
+    // Check optional importer name, default to null
+    const char* importerName = nullptr;
+    if (argc >= 5) {
+        // Importer name provided, check it
+        if (VRFFIGetType(argv[4]) == stringTypeID) {
+            importerName = VRFFIGetString(argv[4]);
+        }
+        else {
+            LOG(1, "If provided, importerName argument to ImportAndMerge must be a string");
+            return nullptr;
+        }
+    }
 
     // Do the import
     int importSuccess = VRXImportAndMerge(
@@ -104,8 +142,8 @@ PLUGIN_ENTRY_POINT int VRTREE_APIENTRY VRPInit()
         s_logFunc(LOG_INFO, "Targeted Import Plugin Initialised.");
 
     // Register utility functions
-    VRFFIRegister("Import", &Import, 4, nullptr);
-    VRFFIRegister("ImportAndMerge", &ImportAndMerge, 5, nullptr);
+    VRFFIRegister("Import", &Import, 3, nullptr);
+    VRFFIRegister("ImportAndMerge", &ImportAndMerge, 4, nullptr);
 
     return 0;
 }
