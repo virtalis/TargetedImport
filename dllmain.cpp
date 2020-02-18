@@ -31,8 +31,6 @@ static HFFIVar Import(int argc, HFFIVar* argv, void*) {
     if (!scenesRootValid) LOG(1, "scenesRoot argument to Import must be a node");
     if (!librariesRootValid) LOG(1, "librariesRoot argument to Import must be a node");
 
-    bool importerNameValid = VRFFIGetType(argv[3]) == stringTypeID;
-
     if (!filepathValid || !scenesRootValid || !librariesRootValid) {
         return nullptr;
     }
@@ -62,7 +60,11 @@ static HFFIVar Import(int argc, HFFIVar* argv, void*) {
         importerName
     );
 
-    return VRFFIMakeBool(importSuccess == 1);
+    char logBuffer[50];
+    (void)sprintf_s(logBuffer, "VRXImport returned: %d", importSuccess);
+    LOG(0, logBuffer);
+
+    return VRFFIMakeBool(importSuccess == 0);
 }
 
 // local success = TargetedImport.ImportAndMerge(filepath, scenesRoot, librariesRoot, mergeSettings, importerName)
@@ -113,7 +115,13 @@ static HFFIVar ImportAndMerge(int argc, HFFIVar* argv, void*) {
         importerName
     );
 
-    return VRFFIMakeBool(importSuccess == 1);
+    char logBuffer[50];
+    (void)sprintf_s(logBuffer, "VRXImport returned: %d", importSuccess);
+    LOG(0, logBuffer);
+
+    return VRFFIMakeBool(importSuccess == 0);
+
+    return VRFFIMakeBool(importSuccess == 0);
 }
 // Enable API stuff
 PLUGIN_ENTRY_POINT const char* VRTREE_APIENTRY VRPSignature()
