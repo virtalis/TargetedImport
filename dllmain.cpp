@@ -61,7 +61,7 @@ static HFFIVar Import(int argc, HFFIVar* argv, void*) {
     );
 
     char logBuffer[50];
-    (void)sprintf_s(logBuffer, "VRXImport returned: %d", importSuccess);
+    (void)sprintf_s(logBuffer, "VRXImport returned: %d\n", importSuccess);
     LOG(0, logBuffer);
 
     return VRFFIMakeBool(importSuccess == 0);
@@ -116,10 +116,8 @@ static HFFIVar ImportAndMerge(int argc, HFFIVar* argv, void*) {
     );
 
     char logBuffer[50];
-    (void)sprintf_s(logBuffer, "VRXImport returned: %d", importSuccess);
+    (void)sprintf_s(logBuffer, "VRXImport returned: %d\n", importSuccess);
     LOG(0, logBuffer);
-
-    return VRFFIMakeBool(importSuccess == 0);
 
     return VRFFIMakeBool(importSuccess == 0);
 }
